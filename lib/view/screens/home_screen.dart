@@ -50,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         onChanged: (value) {},
                         onSubmitted: (value) {
                           if (value.isNotEmpty) {
-                            Provider.of<MediaViewModel>(context)
+                            Provider.of<MediaViewModel>(context, listen: false)
                                 .setSelectedMedia(null);
                             Provider.of<MediaViewModel>(context, listen: false)
                                 .fetchMediaData(value);
@@ -74,7 +74,7 @@ class _HomeScreenState extends State<HomeScreen> {
           mediaList != null && mediaList.length > 0
               ? Expanded(
                   child: PlayerListWidget(mediaList, (Media media) {
-                  Provider.of<MediaViewModel>(context).setSelectedMedia(media);
+                  Provider.of<MediaViewModel>(context, listen: false).setSelectedMedia(media);
                 }))
               : Expanded(
                   child: Center(

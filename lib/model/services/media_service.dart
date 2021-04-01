@@ -4,14 +4,14 @@ import 'package:meta/meta.dart';
 
 import 'package:http/http.dart' as http;
 import 'package:mvvm_flutter_app/model/apis/app_exception.dart';
+import 'package:mvvm_flutter_app/model/services/base_service.dart';
 
-class MediaService {
-  final String _baseUrl = "https://itunes.apple.com/search?term=";
-
-  Future<dynamic> get(String url) async {
+class MediaService extends BaseService {
+  @override
+  Future getResponse(String url) async {
     dynamic responseJson;
     try {
-      final response = await http.get( Uri.parse(_baseUrl + url));
+      final response = await http.get(Uri.parse(mediaBaseUrl + url));
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
