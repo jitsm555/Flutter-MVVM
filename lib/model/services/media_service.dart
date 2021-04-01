@@ -11,7 +11,7 @@ class MediaService {
   Future<dynamic> get(String url) async {
     dynamic responseJson;
     try {
-      final response = await http.get(_baseUrl + url);
+      final response = await http.get( Uri.parse(_baseUrl + url));
       responseJson = returnResponse(response);
     } on SocketException {
       throw FetchDataException('No Internet Connection');
