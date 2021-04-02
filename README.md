@@ -1,6 +1,10 @@
 # Flutter MVVM Architecture
+<img src="assets/flutter_world.png" height="400" alt="Screenshot"/> 
+
 
 Model–View–ViewModel (MVVM) is a very established architectural pattern when it's come to software development. Here I have tried to put MVVM in simple example which will help you to implement in any project. 
+
+Please find complete article on Medium [Link](https://medium.com/flutterworld/flutter-mvvm-architecture-f8bed2521958)
 
 <img src="assets/mvvm_arch.png" height="400" alt="Screenshot"/> 
 
