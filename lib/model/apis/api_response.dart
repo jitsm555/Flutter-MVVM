@@ -1,7 +1,9 @@
 class ApiResponse<T> {
   Status status;
-  T data;
-  String message;
+  T? data;
+  String? message;
+
+  ApiResponse.initial(this.message) : status = Status.INITIAL;
 
   ApiResponse.loading(this.message) : status = Status.LOADING;
 
@@ -15,4 +17,4 @@ class ApiResponse<T> {
   }
 }
 
-enum Status { LOADING, COMPLETED, ERROR }
+enum Status { INITIAL, LOADING, COMPLETED, ERROR }

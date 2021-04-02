@@ -15,7 +15,7 @@ class PlayerListWidget extends StatefulWidget {
 
 class _PlayerListWidgetState extends State<PlayerListWidget> {
   Widget _buildSongItem(Media media) {
-    Media _selectedMedia = Provider.of<MediaViewModel>(context).media;
+    Media? _selectedMedia = Provider.of<MediaViewModel>(context).media;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 10.0, horizontal: 20.0),
       child: Row(
@@ -70,7 +70,7 @@ class _PlayerListWidgetState extends State<PlayerListWidget> {
                   ),
                 ]),
           ),
-          if (_selectedMedia != null && media != null &&
+          if (_selectedMedia != null &&
               _selectedMedia.trackName == media.trackName)
             Icon(
               Icons.play_circle_outline,

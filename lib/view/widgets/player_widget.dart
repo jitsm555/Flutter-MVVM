@@ -15,7 +15,7 @@ class PlayerWidget extends StatefulWidget {
   final Function function;
 
   PlayerWidget(
-      {Key key, @required this.function, this.mode = PlayerMode.MEDIA_PLAYER})
+      {Key? key, required this.function, this.mode = PlayerMode.MEDIA_PLAYER})
       : super(key: key);
 
   @override
@@ -25,19 +25,19 @@ class PlayerWidget extends StatefulWidget {
 }
 
 class _PlayerWidgetState extends State<PlayerWidget> {
-  String _prevSongName;
+  String? _prevSongName;
   PlayerMode mode;
 
-  AudioPlayer _audioPlayer;
-  Duration _duration;
-  Duration _position;
+  late AudioPlayer _audioPlayer;
+  Duration? _duration;
+  Duration? _position;
 
   PlayerState _playerState = PlayerState.stopped;
-  StreamSubscription _durationSubscription;
-  StreamSubscription _positionSubscription;
-  StreamSubscription _playerCompleteSubscription;
-  StreamSubscription _playerErrorSubscription;
-  StreamSubscription _playerStateSubscription;
+  StreamSubscription? _durationSubscription;
+  StreamSubscription? _positionSubscription;
+  StreamSubscription? _playerCompleteSubscription;
+  StreamSubscription? _playerErrorSubscription;
+  StreamSubscription? _playerStateSubscription;
 
   get _isPlaying => _playerState == PlayerState.playing;
 
@@ -60,7 +60,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
     super.dispose();
   }
 
-  void _playCurrentMedia(Media media) {
+  void _playCurrentMedia(Media? media) {
     if (media != null && _prevSongName != media.trackName) {
       _prevSongName = media.trackName;
       _position = null;
@@ -71,7 +71,7 @@ class _PlayerWidgetState extends State<PlayerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    Media media = Provider.of<MediaViewModel>(context).media;
+    Media? media = Provider.of<MediaViewModel>(context).media;
     _playCurrentMedia(media);
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -136,15 +136,15 @@ class _PlayerWidgetState extends State<PlayerWidget> {
                 children: [
                   Slider(
                     onChanged: (v) {
-                      final Position = v * _duration.inMilliseconds;
+                      final position = v * _duration!.inMilliseconds;
                       _audioPlayer
-                          .seek(Duration(milliseconds: Position.round()));
+                          .seek(Duration(milliseconds: position.round()));
                     },
                     value: (_position != null &&
                             _duration != null &&
-                            _position.inMilliseconds > 0 &&
-                            _position.inMilliseconds < _duration.inMilliseconds)
-                        ? _position.inMilliseconds / _duration.inMilliseconds
+                            _position!.inMilliseconds > 0 &&
+                            _position!.inMilliseconds < _duration!.inMilliseconds)
+                        ? _position!.inMilliseconds / _duration!.inMilliseconds
                         : 0.0,
                   ),
                 ],
@@ -207,12 +207,12 @@ class _PlayerWidgetState extends State<PlayerWidget> {
   Future<int> _play(Media media) async {
     final playPosition = (_position != null &&
             _duration != null &&
-            _position.inMilliseconds > 0 &&
-            _position.inMilliseconds < _duration.inMilliseconds)
+            _position!.inMilliseconds > 0 &&
+            _position!.inMilliseconds < _duration!.inMilliseconds)
         ? _position
         : null;
     final result =
-        await _audioPlayer.play(media.previewUrl, position: playPosition);
+        await _audioPlayer.play(media.previewUrl!, position: playPosition);
     if (result == 1) setState(() => _playerState = PlayerState.playing);
 
     // default playback rate is 1.0

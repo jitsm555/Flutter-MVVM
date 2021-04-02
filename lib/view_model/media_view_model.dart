@@ -4,21 +4,23 @@ import 'package:mvvm_flutter_app/model/media.dart';
 import 'package:mvvm_flutter_app/model/media_repository.dart';
 
 class MediaViewModel with ChangeNotifier {
-  ApiResponse _apiResponse = ApiResponse.loading('Fetching artist data');
+  ApiResponse _apiResponse = ApiResponse.initial('Empty data');
 
-  Media _media;
+  Media? _media;
 
   ApiResponse get response {
     return _apiResponse;
   }
 
-  Media get media {
+  Media? get media {
     return _media;
   }
 
   /// Call the media service and gets the data of requested media data of
   /// an artist.
   Future<void> fetchMediaData(String value) async {
+    _apiResponse = ApiResponse.loading('Fetching artist data');
+    notifyListeners();
     try {
       List<Media> mediaList = await MediaRepository().fetchMediaList(value);
       _apiResponse = ApiResponse.completed(mediaList);
@@ -29,7 +31,7 @@ class MediaViewModel with ChangeNotifier {
     notifyListeners();
   }
 
-  void setSelectedMedia(Media media) {
+  void setSelectedMedia(Media? media) {
     _media = media;
     notifyListeners();
   }

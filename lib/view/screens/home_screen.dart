@@ -13,17 +13,53 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
+
+
+  Widget getMediaWidget(BuildContext context, ApiResponse apiResponse) {
+    List<Media>? mediaList = apiResponse.data as List<Media>?;
+    switch (apiResponse.status) {
+      case Status.LOADING:
+        return Center(child: CircularProgressIndicator());
+      case Status.COMPLETED:
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Expanded(
+              flex: 8,
+              child: PlayerListWidget(mediaList!, (Media media) {
+                Provider.of<MediaViewModel>(context, listen: false)
+                .setSelectedMedia(media);
+              }),
+            ),
+            Expanded(
+              flex: 2,
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: PlayerWidget(
+                  function: () {
+                    setState(() {});
+                  },
+                ),
+              ),
+            ),
+          ],
+        );
+      case Status.ERROR:
+        return Center(
+          child: Text('Please try again latter!!!'),
+        );
+      case Status.INITIAL:
+      default:
+        return Center(
+          child: Text('Search the song by Artist'),
+        );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final _inputController = TextEditingController();
     ApiResponse apiResponse = Provider.of<MediaViewModel>(context).response;
-    List<Media> mediaList = apiResponse.data as List<Media>;
     return Scaffold(
       appBar: AppBar(
         title: Text('Media Player'),
@@ -71,25 +107,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          mediaList != null && mediaList.length > 0
-              ? Expanded(
-                  child: PlayerListWidget(mediaList, (Media media) {
-                  Provider.of<MediaViewModel>(context, listen: false).setSelectedMedia(media);
-                }))
-              : Expanded(
-                  child: Center(
-                    child: Text('Search the song by Artist'),
-                  ),
-                ),
-          if (Provider.of<MediaViewModel>(context).media != null)
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: PlayerWidget(
-                function: () {
-                  setState(() {});
-                },
-              ),
-            ),
+          Expanded(child: getMediaWidget(context, apiResponse)),
         ],
       ),
     );
